@@ -8,10 +8,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Color Palette - Simple & Elegant */
+/* Color Theme */
 :root {
-    --primary: #020122;
-    --secondary: #C8EAD3;
+    --primary: #1E1E2F;
+    --secondary: #F5F5F5;
     --accent: #FCBA04;
     --text-light: #ffffff;
     --text-dark: #333333;
@@ -41,27 +41,6 @@ header h1 {
     font-weight: 700;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav a {
-    color: var(--text-light);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-nav a:hover {
-    color: var(--accent);
-}
-
 /* Hero Section */
 #hero {
     padding: 80px 20px;
@@ -70,14 +49,9 @@ nav a:hover {
 }
 
 #hero h2 {
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 36px;
+    font-weight: 700;
     margin-bottom: 10px;
-}
-
-#hero p {
-    font-size: 18px;
-    margin-bottom: 15px;
 }
 
 .btn {
@@ -89,7 +63,6 @@ nav a:hover {
     font-weight: 600;
     display: inline-block;
     margin-top: 10px;
-    transition: background 0.3s ease;
 }
 
 .btn:hover {
@@ -106,12 +79,6 @@ section {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-    font-size: 26px;
-    color: var(--primary);
-    margin-bottom: 20px;
-}
-
 /* Projects */
 #projects-container {
     display: flex;
@@ -120,40 +87,7 @@ h2 {
     gap: 20px;
 }
 
-.project {
-    background: var(--text-light);
-    padding: 15px;
-    width: 300px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-}
-
-.project:hover {
-    transform: translateY(-5px);
-}
-
-.project h3 {
-    font-size: 20px;
-    color: var(--primary);
-}
-
-.project a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.project a:hover {
-    text-decoration: underline;
-}
-
-/* Contact Section */
-#contact p {
-    font-size: 16px;
-    margin: 8px 0;
-}
-
+/* Footer */
 footer {
     background: var(--primary);
     color: var(--text-light);
