@@ -8,35 +8,39 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Apply Your Color Palette */
+/* Color Palette */
 :root {
     --gold: #FCBA04;
     --dark-blue: #020122;
     --mint-green: #C8EAD3;
     --soft-pink: #FFB7C3;
     --deep-red: #8C271E;
+    --white: #fff;
 }
 
+/* Body */
 body {
-    background-color: var(--mint-green);
-    color: var(--dark-blue);
+    background-color: var(--dark-blue);
+    color: var(--white);
     text-align: center;
 }
 
-/* Header Styling */
+/* Header */
 header {
     background-color: var(--dark-blue);
-    color: white;
+    color: var(--white);
     padding: 15px 0;
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 1000;
     transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
     font-size: 26px;
+    font-weight: 700;
 }
 
 nav ul {
@@ -50,7 +54,7 @@ nav ul li {
 }
 
 nav a {
-    color: white;
+    color: var(--white);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
@@ -64,19 +68,27 @@ nav a:hover {
 #hero {
     padding: 80px 20px;
     background: linear-gradient(to right, var(--dark-blue), var(--deep-red));
-    color: white;
+    color: var(--white);
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #hero h2 {
-    font-size: 32px;
+    font-size: 36px;
+    font-weight: 700;
     margin-bottom: 10px;
-    font-weight: 600;
+    text-transform: uppercase;
+    animation: fadeIn 1s ease-in-out;
 }
 
 #hero p {
     font-size: 20px;
     margin-bottom: 15px;
+    opacity: 0;
+    animation: slideIn 1s forwards;
 }
 
 .btn {
@@ -94,18 +106,24 @@ nav a:hover {
 .btn:hover {
     background-color: var(--soft-pink);
     transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(255, 183, 195, 0.3);
 }
 
 /* Sections */
 section {
     padding: 60px 20px;
     background-color: var(--mint-green);
+    border-radius: 20px;
+    margin: 20px auto;
+    width: 90%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
     font-size: 28px;
     color: var(--dark-blue);
     margin-bottom: 20px;
+    text-transform: uppercase;
 }
 
 /* Projects */
@@ -117,10 +135,11 @@ h2 {
 }
 
 .project {
-    background: white;
+    background: rgba(255, 255, 255, 0.15);
     padding: 20px;
     width: 320px;
-    border-radius: 8px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -145,15 +164,21 @@ h2 {
     text-decoration: underline;
 }
 
-/* Contact Section */
-#contact p {
-    font-size: 18px;
-    margin: 8px 0;
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
+@keyframes slideIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0px); opacity: 1; }
+}
+
+/* Footer */
 footer {
     background: var(--dark-blue);
-    color: white;
+    color: var(--white);
     padding: 15px;
     font-size: 14px;
 }
