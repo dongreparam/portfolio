@@ -2,7 +2,7 @@
 
 Welcome to my **Portfolio Website** repository! This project showcases my skills, projects, and experience as a **Software Engineer** and **Data Scientist**. The website is designed to be sleek, modern, and interactive, with features like dark/light mode, animations, and real-time data visualization.
 
-👉 **[Visit the Live Website]([https://your-portfolio-url.com](https://dongreparam.github.io/portfolio/))**
+👉 **[Visit the Live Website]([https://dongreparam.github.io/portfolio])**
 
 ---
 
