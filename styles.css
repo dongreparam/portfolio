@@ -55,6 +55,11 @@ nav a {
     border-radius: 5px;
 }
 
+.social-icon {
+    width: 30px;
+    margin: 5px;
+}
+
 footer {
     background: #333;
     color: white;
