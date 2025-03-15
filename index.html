@@ -6,6 +6,7 @@
     <title>Param Dongre | Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script defer src="script.js"></script>
 </head>
 <body>
@@ -72,14 +73,59 @@
         </div>
     </section>
 
+    <!-- Skills Section -->
+    <section id="skills" data-aos="fade-up">
+        <h2>Skills</h2>
+        <div class="skill">
+            <span>Java</span>
+            <div class="progress-bar"><div class="progress" data-skill="Java" data-width="0%"></div></div>
+        </div>
+        <div class="skill">
+            <span>Python</span>
+            <div class="progress-bar"><div class="progress" data-skill="Python" data-width="0%"></div></div>
+        </div>
+        <div class="skill">
+            <span>SQL</span>
+            <div class="progress-bar"><div class="progress" data-skill="SQL" data-width="0%"></div></div>
+        </div>
+        <div class="skill">
+            <span>GitHub</span>
+            <div class="progress-bar"><div class="progress" data-skill="GitHub" data-width="0%"></div></div>
+        </div>
+        <div class="skill">
+            <span>OFBiz</span>
+            <div class="progress-bar"><div class="progress" data-skill="OFBiz" data-width="0%"></div></div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" data-aos="fade-up">
+        <h2>Timeline</h2>
+        <div class="timeline">
+            <div class="timeline-item" data-aos="fade-right">
+                <h3>2024 - Present</h3>
+                <p>Software Engineering Intern at HotWax Commerce</p>
+            </div>
+            <div class="timeline-item" data-aos="fade-left">
+                <h3>2023 - 2024</h3>
+                <p>Completed Data Science Specialization</p>
+            </div>
+            <div class="timeline-item" data-aos="fade-right">
+                <h3>2022 - 2023</h3>
+                <p>Worked on AI-driven analytics projects</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" data-aos="fade-up">
         <h2>Contact Me</h2>
-        <div class="contact-links">
-            <a href="mailto:param.dongre@gmail.com" class="btn">Email</a>
-            <a href="https://github.com/dongreparam" target="_blank" class="btn">GitHub</a>
-            <a href="https://www.linkedin.com/in/paramdongre/" target="_blank" class="btn">LinkedIn</a>
-        </div>
+        <form id="contact-form">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
     </section>
 
     <!-- Footer -->

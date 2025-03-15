@@ -68,6 +68,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     typeWriter();
 
+    // Skill Progress Bars
+    const skills = ["Java", "Python", "SQL", "GitHub", "OFBiz"];
+    const skillCounts = {};
+
+    // Fetch all repositories to analyze skills
+    fetch(`https://api.github.com/users/${username}/repos`)
+        .then(response => response.json())
+        .then(repos => {
+            repos.forEach(repo => {
+                const languagesUrl = repo.languages_url;
+                fetch(languagesUrl)
+                    .then(response => response.json())
+                    .then(languages => {
+                        Object.keys(languages).forEach(language => {
+                            if (skills.includes(language)) {
+                                skillCounts[language] = (skillCounts[language] || 0) + 1;
+                            }
+                        });
+
+                        // Update progress bars
+                        skills.forEach(skill => {
+                            const progressBar = document.querySelector(`.progress[data-skill="${skill}"]`);
+                            if (progressBar) {
+                                const count = skillCounts[skill] || 0;
+                                const width = (count / repos.length) * 100;
+                                progressBar.style.width = `${width}%`;
+                                progressBar.setAttribute("data-width", `${width}%`);
+                            }
+                        });
+                    })
+                    .catch(error => console.error("Error fetching languages:", error));
+            });
+        })
+        .catch(error => console.error("Error fetching repos:", error));
+
+    // Contact Form Submission
+    const contactForm = document.getElementById("contact-form");
+    contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+        });
+        alert("Thank you for your message!");
+        contactForm.reset();
+    });
+
     // Initialize AOS
     AOS.init();
 });
