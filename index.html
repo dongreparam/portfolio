@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Param Dongre | Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script defer src="script.js"></script>
 </head>
 <body>
+
+    <!-- Loading Animation -->
+    <div id="loading">
+        <div class="spinner"></div>
+    </div>
 
     <!-- Header -->
     <header>
@@ -16,11 +22,13 @@
             <ul>
                 <li><a href="#about">About</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#blog">Blog</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="ParamDongreResume.pdf" target="_blank" class="btn">Resume</a></li>
             </ul>
         </nav>
+        <button id="theme-toggle">🌓</button>
     </header>
 
     <!-- Hero Section -->
@@ -33,19 +41,25 @@
     </section>
 
     <!-- About Section -->
-    <section id="about">
+    <section id="about" data-aos="fade-up">
         <h2>About Me</h2>
         <p>I'm a Computer Science student specializing in Data Science, experienced in Java, Python, and SQL. Currently interning at <strong>HotWax Commerce</strong>, working on scalable backend solutions and AI-driven analytics.</p>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects">
+    <section id="projects" data-aos="fade-up">
         <h2>Highlighted Projects</h2>
         <div id="projects-container"></div>
     </section>
 
+    <!-- Blog Section -->
+    <section id="blog" data-aos="fade-up">
+        <h2>Latest Blog Post</h2>
+        <div id="blog-posts"></div>
+    </section>
+
     <!-- Experience Section -->
-    <section id="experience">
+    <section id="experience" data-aos="fade-up">
         <h2>Experience</h2>
         <div class="experience-item">
             <h3>Software Engineering Intern</h3>
@@ -59,7 +73,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact">
+    <section id="contact" data-aos="fade-up">
         <h2>Contact Me</h2>
         <div class="contact-links">
             <a href="mailto:param.dongre@gmail.com" class="btn">Email</a>
@@ -73,5 +87,7 @@
         <p>© 2024 Param Dongre | Built with ❤️</p>
     </footer>
 
+    <!-- AOS Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>
