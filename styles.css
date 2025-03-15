@@ -8,15 +8,24 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* Apply Your Color Palette */
+:root {
+    --gold: #FCBA04;
+    --dark-blue: #020122;
+    --mint-green: #C8EAD3;
+    --soft-pink: #FFB7C3;
+    --deep-red: #8C271E;
+}
+
 body {
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: var(--mint-green);
+    color: var(--dark-blue);
     text-align: center;
 }
 
 /* Header Styling */
 header {
-    background-color: #004f90;
+    background-color: var(--dark-blue);
     color: white;
     padding: 15px 0;
     position: sticky;
@@ -48,45 +57,54 @@ nav a {
 }
 
 nav a:hover {
-    color: #ffcc00;
+    color: var(--gold);
 }
 
 /* Hero Section */
 #hero {
     padding: 80px 20px;
-    background: linear-gradient(to right, #004f90, #0077b6);
+    background: linear-gradient(to right, var(--dark-blue), var(--deep-red));
     color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 #hero h2 {
     font-size: 32px;
     margin-bottom: 10px;
+    font-weight: 600;
+}
+
+#hero p {
+    font-size: 20px;
+    margin-bottom: 15px;
 }
 
 .btn {
-    background-color: #ffcc00;
-    color: black;
+    background-color: var(--gold);
+    color: var(--dark-blue);
     padding: 12px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 600;
     display: inline-block;
     margin-top: 10px;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s;
 }
 
 .btn:hover {
-    background-color: #ff9900;
+    background-color: var(--soft-pink);
+    transform: scale(1.05);
 }
 
 /* Sections */
 section {
     padding: 60px 20px;
+    background-color: var(--mint-green);
 }
 
 h2 {
     font-size: 28px;
-    color: #004f90;
+    color: var(--dark-blue);
     margin-bottom: 20px;
 }
 
@@ -114,11 +132,11 @@ h2 {
 
 .project h3 {
     font-size: 22px;
-    color: #0077b6;
+    color: var(--deep-red);
 }
 
 .project a {
-    color: #ff9900;
+    color: var(--gold);
     text-decoration: none;
     font-weight: 600;
 }
@@ -134,7 +152,7 @@ h2 {
 }
 
 footer {
-    background: #333;
+    background: var(--dark-blue);
     color: white;
     padding: 15px;
     font-size: 14px;
