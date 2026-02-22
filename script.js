@@ -476,3 +476,306 @@ function launchConfetti() {
   }
 })();
 
+// =============================================
+// LIVE ACTIVITY AVATAR STATE MACHINE
+// =============================================
+(async function initAvatarWidget() {
+  const widget    = document.getElementById('avatarWidget');
+  const chipText  = document.getElementById('avatarChipText');
+  const chipDot   = document.getElementById('avatarChipDot');
+  const floats    = document.getElementById('avatarFloats');
+  const canvas    = document.getElementById('avatarCanvas');
+  if (!widget) return;
+
+  // ---- State definitions ----
+  const STATES = {
+    onleave:  { cls: 'av-onleave',  dot: '#fbbf24', label: '🏖️ On Leave — fully offline',       floatEmojis: ['✈️','🎉','🌴','😎','🥳'] },
+    sleeping: { cls: 'av-sleeping', dot: '#64748b', label: '😴 Sleeping — DND till 7 AM',        floatEmojis: ['💤','⭐','🌙','✨','💤'] },
+    swimming: { cls: 'av-swimming', dot: '#00d4ff', label: '🏊 In the pool — back by 9 AM',      floatEmojis: ['🏊','🌊','💦','🏊','🌊'] },
+    working:  { cls: 'av-working',  dot: '#4f7cff', label: '💼 Working — GChat only pls',        floatEmojis: ['</>', '{}', '=>', '⚡', '🔧'] },
+    offduty:  { cls: 'av-offduty',  dot: '#9b6fd4', label: '🎬 Off-duty — movies & scrolling',   floatEmojis: ['🎬','📱','🍿','☕','🎬'] },
+    weekend:  { cls: 'av-weekend',  dot: '#22c55e', label: '🌴 Weekend — games, coffee, vibes',  floatEmojis: ['🎮','☕','🕹️','🌞','🎵'] },
+  };
+
+  // ---- Load leaves.json ----
+  let leaveDates = new Set();
+  try {
+    const r = await fetch('assets/leaves.json');
+    if (r.ok) {
+      const data = await r.json();
+      (data.leaves || []).forEach(d => leaveDates.add(d));
+    }
+  } catch (_) {}
+
+  // ---- IST time resolver ----
+  function getISTState() {
+    // IST = UTC + 5:30
+    const now = new Date();
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const ist = new Date(utc + 5.5 * 3600000);
+    const h   = ist.getHours();
+    const day = ist.getDay(); // 0=Sun
+    const dateStr = ist.toISOString().slice(0, 10);
+
+    if (leaveDates.has(dateStr)) return 'onleave';
+    // Night / sleep (11 PM – 7 AM)
+    if (h >= 23 || h < 7) return 'sleeping';
+    // Swimming (7–9 AM) — Mon–Sat
+    if (h >= 7 && h < 9 && day !== 0) return 'swimming';
+    // Working (9 AM–9 PM) — Mon–Sat
+    if (h >= 9 && h < 21 && day !== 0) return 'working';
+    // Off-duty (9–11 PM) — Mon–Sat
+    if (h >= 21 && h < 23 && day !== 0) return 'offduty';
+    // Sunday (any non-sleeping hour)
+    if (day === 0) return 'weekend';
+    return 'offduty';
+  }
+
+  // ---- Canvas animation ----
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let canvasRaf = null;
+  let canvasParticles = [];
+
+  function resizeCanvas() {
+    if (!canvas) return;
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function clearCanvas() {
+    if (canvasRaf) cancelAnimationFrame(canvasRaf);
+    canvasParticles = [];
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function startSleepingCanvas() {
+    // Slow drifting white specks (starfield)
+    for (let i = 0; i < 40; i++) {
+      canvasParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.5,
+        a: Math.random(),
+        da: (Math.random() - 0.5) * 0.008,
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: -Math.random() * 0.15,
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasParticles.forEach(p => {
+        p.x += p.dx; p.y += p.dy; p.a += p.da;
+        if (p.a <= 0 || p.a >= 1) p.da *= -1;
+        if (p.y < 0) p.y = canvas.height;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, Math.min(1, p.a))})`;
+        ctx.fill();
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  function startSwimmingCanvas() {
+    // Expanding aqua ripple rings
+    let rings = [];
+    let tick = 0;
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    (function draw() {
+      tick++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (tick % 45 === 0) rings.push({ r: 10, a: 0.7 });
+      rings = rings.filter(rg => rg.a > 0.01);
+      rings.forEach(rg => {
+        rg.r += 1.8; rg.a -= 0.008;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rg.r, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(0,212,255,${rg.a})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  function startWorkingCanvas() {
+    // Falling code glyphs
+    const glyphs = ['</>', '{}', '=>', '&&', '||', '0x', ';;', '::'];
+    for (let i = 0; i < 18; i++) {
+      canvasParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vy: Math.random() * 0.6 + 0.2,
+        a: Math.random() * 0.4 + 0.1,
+        glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+        size: Math.random() * 6 + 7,
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasParticles.forEach(p => {
+        p.y += p.vy;
+        if (p.y > canvas.height) p.y = -12;
+        ctx.font = `${p.size}px JetBrains Mono, monospace`;
+        ctx.fillStyle = `rgba(79,124,255,${p.a})`;
+        ctx.fillText(p.glyph, p.x, p.y);
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  function startOffdutyCanvas() {
+    // Warm purple ambient shimmer dots
+    for (let i = 0; i < 25; i++) {
+      canvasParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        a: Math.random() * 0.5,
+        da: (Math.random() - 0.5) * 0.015,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.3,
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasParticles.forEach(p => {
+        p.x += p.dx; p.y += p.dy; p.a += p.da;
+        if (p.a <= 0 || p.a >= 0.6) p.da *= -1;
+        if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(155,111,212,${Math.max(0,p.a)})`;
+        ctx.fill();
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  function startWeekendCanvas() {
+    // Green sparkle twinkles
+    for (let i = 0; i < 30; i++) {
+      canvasParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2.5 + 0.5,
+        a: Math.random(),
+        da: (Math.random() - 0.5) * 0.02,
+        dx: (Math.random() - 0.5) * 0.25,
+        dy: (Math.random() - 0.5) * 0.25,
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasParticles.forEach(p => {
+        p.x += p.dx; p.y += p.dy; p.a += p.da;
+        if (p.a <= 0 || p.a >= 1) p.da *= -1;
+        if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(34,197,94,${Math.max(0,Math.min(1,p.a))})`;
+        ctx.fill();
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  function startLeaveCanvas() {
+    // Gold confetti
+    const colors = ['#fbbf24','#f59e0b','#fde68a','#fcd34d','#ffffff'];
+    for (let i = 0; i < 45; i++) {
+      canvasParticles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        w: Math.random() * 8 + 4,
+        h: Math.random() * 5 + 2,
+        vy: Math.random() * 1.2 + 0.5,
+        vx: (Math.random() - 0.5) * 1.5,
+        rot: Math.random() * Math.PI * 2,
+        rs: (Math.random() - 0.5) * 0.12,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasParticles.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.rot += p.rs;
+        if (p.y > canvas.height) p.y = -10;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      canvasRaf = requestAnimationFrame(draw);
+    })();
+  }
+
+  const canvasStarters = {
+    sleeping: startSleepingCanvas,
+    swimming: startSwimmingCanvas,
+    working:  startWorkingCanvas,
+    offduty:  startOffdutyCanvas,
+    weekend:  startWeekendCanvas,
+    onleave:  startLeaveCanvas,
+  };
+
+  // ---- Floating emoji spawner ----
+  let floatInterval = null;
+  function startFloats(emojis) {
+    if (floatInterval) clearInterval(floatInterval);
+    floats.innerHTML = '';
+    function spawnFloat() {
+      const em = document.createElement('span');
+      em.className = 'av-float';
+      em.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      em.style.left = (15 + Math.random() * 65) + '%';
+      em.style.animationDuration = (2.8 + Math.random() * 1.4) + 's';
+      em.style.fontSize = (1.1 + Math.random() * 0.6) + 'rem';
+      floats.appendChild(em);
+      em.addEventListener('animationend', () => em.remove());
+    }
+    spawnFloat();
+    floatInterval = setInterval(spawnFloat, 1800);
+  }
+
+  // ---- Apply state ----
+  const allCls = Object.values(STATES).map(s => s.cls);
+
+  function applyState(stateName) {
+    const state = STATES[stateName] || STATES.offduty;
+    // Swap CSS class
+    widget.classList.remove(...allCls);
+    widget.classList.add(state.cls);
+    // Chip
+    chipText.textContent = state.label;
+    chipDot.style.setProperty('background', state.dot);
+    chipDot.style.setProperty('box-shadow', `0 0 6px ${state.dot}`);
+    // Canvas
+    clearCanvas();
+    resizeCanvas();
+    if (canvasStarters[stateName]) canvasStarters[stateName]();
+    // Floats
+    startFloats(state.floatEmojis);
+  }
+
+  // ---- Boot ----
+  function tick() {
+    applyState(getISTState());
+  }
+  tick();
+  // Re-evaluate every 60s (in case page is left open)
+  setInterval(tick, 60000);
+
+  // ---- Dev debug hook ----
+  window.__avatarDebug = (state) => applyState(state);
+  console.log('%c[Avatar] Debug: call window.__avatarDebug("working"|"sleeping"|"swimming"|"offduty"|"weekend"|"onleave")', 'color:#4f7cff;font-family:monospace');
+
+})();
+
+

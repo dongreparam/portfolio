@@ -106,14 +106,28 @@
       <div class="section-label" data-aos="fade-right"><span class="mono">01.</span> About Me</div>
       <div class="about-grid">
         <div class="about-photo-wrap" data-aos="fade-right" data-aos-delay="100">
-          <div class="photo-frame">
-            <img src="assets/profile.jpeg" alt="Param Dongre" class="profile-photo" />
-            <div class="photo-border"></div>
-          </div>
-          <div class="about-status">
-            <span class="status-dot"></span> Available for new opportunities
+          <!-- LIVE ACTIVITY AVATAR WIDGET -->
+          <div class="avatar-widget" id="avatarWidget">
+            <!-- Canvas for per-state particle/ripple effects -->
+            <canvas class="avatar-canvas" id="avatarCanvas"></canvas>
+
+            <!-- Rotating glow ring -->
+            <div class="avatar-ring-outer" id="avatarRingOuter"></div>
+
+            <!-- Caricature portrait -->
+            <img src="assets/avatar.png" alt="Param Dongre" class="avatar-img" id="avatarImg" />
+
+            <!-- Floating emoji particles layer -->
+            <div class="avatar-floats" id="avatarFloats"></div>
+
+            <!-- Activity status chip -->
+            <div class="avatar-chip" id="avatarChip">
+              <span class="avatar-chip-dot" id="avatarChipDot"></span>
+              <span id="avatarChipText">…</span>
+            </div>
           </div>
         </div>
+
         <div class="about-text" data-aos="fade-left" data-aos-delay="200">
           <h2 class="section-title">Who Am I?</h2>
           <p>I'm a <strong>Backend Engineer & AI Builder</strong> based in Indore, India, currently crafting enterprise-grade systems at <strong>HotWax Commerce</strong>. I live at the intersection of complex distributed systems and the emerging world of Agentic AI.</p>
