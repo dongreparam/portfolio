@@ -139,25 +139,26 @@ document.querySelectorAll('.sound-hover, a, button').forEach(el => {
 });
 
 // =============================================
-// 4. SKILL PROGRESS RINGS
+// 4. SKILL PROFICIENCY BARS
 // =============================================
-const rings = document.querySelectorAll('.ring-item');
-const circumference = 2 * Math.PI * 32; // r=32
-
-function animateRings() {
-  rings.forEach(ring => {
-    const fill = ring.querySelector('.ring-fill');
-    const pct = parseInt(ring.dataset.percent, 10);
-    const offset = circumference - (pct / 100) * circumference;
-    fill.style.strokeDashoffset = offset;
-  });
-}
+const sbarFills = document.querySelectorAll('.sbar-fill');
+sbarFills.forEach(fill => { fill.style.width = '0'; });
 
 const skillSection = document.getElementById('skills');
 const skillObserver = new IntersectionObserver((entries) => {
-  if (entries[0].isIntersecting) { animateRings(); skillObserver.disconnect(); }
-}, { threshold: 0.3 });
+  if (entries[0].isIntersecting) {
+    sbarFills.forEach((fill, i) => {
+      setTimeout(() => {
+        const w = fill.style.getPropertyValue('--w') ||
+          getComputedStyle(fill).getPropertyValue('--w').trim();
+        fill.style.width = w;
+      }, i * 120);
+    });
+    skillObserver.disconnect();
+  }
+}, { threshold: 0.2 });
 if (skillSection) skillObserver.observe(skillSection);
+
 
 // =============================================
 // 8. TERMINAL WIDGET
