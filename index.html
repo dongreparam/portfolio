@@ -22,6 +22,29 @@
 </head>
 <body>
 
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- SCROLL PROGRESS BAR -->
+  <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+  <!-- SOUND TOGGLE -->
+  <button class="sound-toggle" id="soundToggle" title="Toggle sounds" aria-label="Toggle sounds">🔇</button>
+
+  <!-- EASTER EGG MODAL -->
+  <div class="easter-egg-overlay" id="easterEggOverlay">
+    <div class="easter-egg-modal">
+      <div class="ee-emoji">🎮</div>
+      <h2>You found the Easter Egg!</h2>
+      <p class="ee-mono mono">↑ ↑ ↓ ↓ ← → ← → B A</p>
+      <p>Okay, you're officially a legend. Most people don't even read the fine print, and here you are casually pulling Konami codes.</p>
+      <p class="ee-quote">"The best engineers are curious first and clever second."<br/><span>— Param Dongre (just now)</span></p>
+      <button class="ee-close" id="eeClose"><i class="fa-solid fa-xmark"></i> Close & Carry On</button>
+    </div>
+    <canvas id="confettiCanvas"></canvas>
+  </div>
+
   <!-- NAV -->
   <nav class="navbar" id="navbar">
     <div class="nav-brand">
@@ -42,6 +65,11 @@
 
   <!-- HERO -->
   <section class="hero" id="home">
+    <!-- Aurora blobs -->
+    <div class="aurora-blob blob-1"></div>
+    <div class="aurora-blob blob-2"></div>
+    <div class="aurora-blob blob-3"></div>
+    <div class="aurora-blob blob-4"></div>
     <div id="particles-js"></div>
     <div class="hero-glow glow-1"></div>
     <div class="hero-glow glow-2"></div>
@@ -57,13 +85,13 @@
         <span class="mono">// </span>Jack of all trades &mdash; master of shipping things that actually work.
       </p>
       <div class="hero-cta-group">
-        <a href="#projects" class="btn btn-primary">View My Work <i class="fa-solid fa-arrow-down"></i></a>
-        <a href="assets/resume.pdf" class="btn btn-outline" download target="_blank">Download Resume <i class="fa-solid fa-file-arrow-down"></i></a>
+        <a href="#projects" class="btn btn-primary sound-hover">View My Work <i class="fa-solid fa-arrow-down"></i></a>
+        <a href="assets/resume.pdf" class="btn btn-outline sound-hover" download target="_blank">Download Resume <i class="fa-solid fa-file-arrow-down"></i></a>
       </div>
       <div class="hero-socials">
-        <a href="https://github.com/dongreparam" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="https://linkedin.com/in/paramdongre" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="mailto:param.dongre@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://github.com/dongreparam" target="_blank" aria-label="GitHub" class="sound-hover"><i class="fa-brands fa-github"></i></a>
+        <a href="https://linkedin.com/in/paramdongre" target="_blank" aria-label="LinkedIn" class="sound-hover"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:param.dongre@gmail.com" aria-label="Email" class="sound-hover"><i class="fa-solid fa-envelope"></i></a>
       </div>
     </div>
     <div class="scroll-indicator">
@@ -106,6 +134,33 @@
           </div>
         </div>
       </div>
+
+      <!-- TERMINAL + GITHUB STATS -->
+      <div class="about-extras" data-aos="fade-up" data-aos-delay="100">
+        <div class="terminal-widget">
+          <div class="terminal-header">
+            <span class="terminal-dot td-red"></span>
+            <span class="terminal-dot td-yellow"></span>
+            <span class="terminal-dot td-green"></span>
+            <span class="terminal-title">param@portfolio: ~</span>
+          </div>
+          <div class="terminal-body" id="terminalBody">
+            <!-- Animated via JS -->
+          </div>
+        </div>
+        <div class="github-stats-wrap">
+          <img
+            src="https://github-readme-stats.vercel.app/api?username=dongreparam&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1629&title_color=4f7cff&icon_color=00d4ff&text_color=8892a4&count_private=true"
+            alt="Param's GitHub Stats"
+            class="github-stats-img"
+          />
+          <img
+            src="https://github-readme-stats.vercel.app/api/top-langs/?username=dongreparam&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1629&title_color=4f7cff&text_color=8892a4"
+            alt="Top Languages"
+            class="github-stats-img"
+          />
+        </div>
+      </div>
     </div>
   </section>
 
@@ -115,57 +170,71 @@
       <div class="section-label" data-aos="fade-right"><span class="mono">02.</span> Skills</div>
       <h2 class="section-title centered" data-aos="fade-up">What I Work With</h2>
       <div class="skills-grid">
-
         <div class="skill-category" data-aos="fade-up" data-aos-delay="0">
           <div class="skill-cat-icon"><i class="fa-solid fa-code"></i></div>
           <h3>Languages</h3>
           <div class="skill-tags">
-            <span>Java</span>
-            <span>TypeScript</span>
-            <span>JavaScript</span>
-            <span>Groovy</span>
-            <span>SQL</span>
-            <span>XML</span>
+            <span>Java</span><span>TypeScript</span><span>JavaScript</span><span>Groovy</span><span>SQL</span><span>XML</span>
           </div>
         </div>
-
         <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
           <div class="skill-cat-icon"><i class="fa-solid fa-brain"></i></div>
           <h3>AI & Frameworks</h3>
           <div class="skill-tags">
-            <span class="hot">Mastra (Agentic AI)</span>
-            <span>Spring Boot</span>
-            <span>Apache OFBiz</span>
-            <span>Moqui</span>
-            <span>React Native</span>
+            <span class="hot">Mastra (Agentic AI)</span><span>Spring Boot</span><span>Apache OFBiz</span><span>Moqui</span><span>React Native</span>
           </div>
         </div>
-
         <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
           <div class="skill-cat-icon"><i class="fa-brands fa-aws"></i></div>
           <h3>Systems & Cloud</h3>
           <div class="skill-tags">
-            <span>AWS SQS</span>
-            <span>EventBridge</span>
-            <span>Shopify API</span>
-            <span>Webhooks</span>
-            <span>Docker</span>
-            <span>System Design</span>
+            <span>AWS SQS</span><span>EventBridge</span><span>Shopify API</span><span>Webhooks</span><span>Docker</span><span>System Design</span>
           </div>
         </div>
-
         <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
           <div class="skill-cat-icon"><i class="fa-solid fa-database"></i></div>
           <h3>Data & Tooling</h3>
           <div class="skill-tags">
-            <span>PostgreSQL</span>
-            <span>MySQL</span>
-            <span>Git</span>
-            <span>Jira</span>
-            <span>Postman</span>
+            <span>PostgreSQL</span><span>MySQL</span><span>Git</span><span>Jira</span><span>Postman</span>
           </div>
         </div>
+      </div>
 
+      <!-- SKILL PROFICIENCY RINGS -->
+      <div class="skill-rings-section" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="rings-title">Proficiency</h3>
+        <div class="skill-rings-grid">
+          <div class="ring-item" data-percent="90" data-color="#4f7cff">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#4f7cff"/></svg>
+            <span class="ring-pct">90%</span>
+            <p class="ring-label">Java</p>
+          </div>
+          <div class="ring-item" data-percent="78" data-color="#00d4ff">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#00d4ff"/></svg>
+            <span class="ring-pct">78%</span>
+            <p class="ring-label">TypeScript</p>
+          </div>
+          <div class="ring-item" data-percent="85" data-color="#9b6fd4">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#9b6fd4"/></svg>
+            <span class="ring-pct">85%</span>
+            <p class="ring-label">Apache OFBiz</p>
+          </div>
+          <div class="ring-item" data-percent="72" data-color="#f97316">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#f97316"/></svg>
+            <span class="ring-pct">72%</span>
+            <p class="ring-label">Mastra AI</p>
+          </div>
+          <div class="ring-item" data-percent="80" data-color="#22c55e">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#22c55e"/></svg>
+            <span class="ring-pct">80%</span>
+            <p class="ring-label">AWS / Cloud</p>
+          </div>
+          <div class="ring-item" data-percent="82" data-color="#ec4899">
+            <svg class="ring-svg" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="32"/><circle class="ring-fill" cx="40" cy="40" r="32" stroke="#ec4899"/></svg>
+            <span class="ring-pct">82%</span>
+            <p class="ring-label">System Design</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -176,7 +245,6 @@
       <div class="section-label" data-aos="fade-right"><span class="mono">03.</span> Experience</div>
       <h2 class="section-title" data-aos="fade-up">Where I've Worked</h2>
       <div class="timeline">
-
         <div class="timeline-item" data-aos="fade-up" data-aos-delay="0">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
@@ -198,7 +266,6 @@
             </div>
           </div>
         </div>
-
         <div class="timeline-item" data-aos="fade-up" data-aos-delay="150">
           <div class="timeline-dot"></div>
           <div class="timeline-card">
@@ -217,7 +284,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -229,7 +295,7 @@
       <h2 class="section-title centered" data-aos="fade-up">Things I've Built</h2>
       <div class="projects-grid">
 
-        <div class="project-card" data-tilt data-aos="fade-up" data-aos-delay="0">
+        <div class="project-card sound-hover" data-tilt data-aos="fade-up" data-aos-delay="0">
           <div class="project-card-inner">
             <div class="project-top">
               <div class="project-icon"><i class="fa-solid fa-truck-fast"></i></div>
@@ -239,14 +305,15 @@
             </div>
             <h3 class="project-title">Vitran Ecosystem</h3>
             <p class="project-subtitle">Logistics Management Platform</p>
-            <p class="project-desc">A full backend-driven logistics platform managing daily deliveries for <strong>500+ customers</strong>. Built real-time stock sync via Java/Spring Boot, offline-first REST APIs for mobile ops, and managed the full SDLC from architecture to Docker deployment.</p>
+            <p class="project-desc">A full backend-driven logistics platform managing daily deliveries for <strong>500+ customers</strong>. Real-time stock sync via Java/Spring Boot, offline-first REST APIs, full SDLC from architecture to Docker deployment.</p>
             <div class="project-stack">
               <span>Spring Boot</span><span>React Native</span><span>MySQL</span><span>Docker</span>
             </div>
+            <button class="project-expand-btn" data-project="vitran">Quick Look <i class="fa-solid fa-expand"></i></button>
           </div>
         </div>
 
-        <div class="project-card featured" data-tilt data-aos="fade-up" data-aos-delay="100">
+        <div class="project-card featured sound-hover" data-tilt data-aos="fade-up" data-aos-delay="100">
           <div class="project-card-inner">
             <div class="project-top">
               <div class="project-icon"><i class="fa-solid fa-robot"></i></div>
@@ -257,14 +324,15 @@
             <span class="project-featured-badge">⚡ Featured</span>
             <h3 class="project-title">MCP Server for SOC OFBiz</h3>
             <p class="project-subtitle">AI ↔ Enterprise Bridge</p>
-            <p class="project-desc">An MCP (Model Context Protocol) server that acts as the bridge between AI agents and the OFBiz enterprise system — enabling AI to query, reason about, and interact with complex commerce data through a structured protocol layer.</p>
+            <p class="project-desc">An MCP (Model Context Protocol) server that bridges AI agents with the OFBiz enterprise system — enabling AI to query, reason, and interact with complex commerce data.</p>
             <div class="project-stack">
               <span>TypeScript</span><span>MCP</span><span>OFBiz</span><span>AI</span>
             </div>
+            <button class="project-expand-btn" data-project="mcp">Quick Look <i class="fa-solid fa-expand"></i></button>
           </div>
         </div>
 
-        <div class="project-card" data-tilt data-aos="fade-up" data-aos-delay="200">
+        <div class="project-card sound-hover" data-tilt data-aos="fade-up" data-aos-delay="200">
           <div class="project-card-inner">
             <div class="project-top">
               <div class="project-icon"><i class="fa-solid fa-shop"></i></div>
@@ -274,16 +342,25 @@
             </div>
             <h3 class="project-title">HotWax Commerce Work</h3>
             <p class="project-subtitle">Enterprise Shopify Integration</p>
-            <p class="project-desc">Designed and implemented resilient <strong>Shopify product sync, order lifecycle management</strong>, and event-driven data pipelines using AWS SQS/EventBridge. Also built an autonomous <strong>DataManager Expert AI agent</strong> using Mastra to automate error detection and resolution.</p>
+            <p class="project-desc">Designed resilient <strong>Shopify product sync, order lifecycle management</strong>, and event-driven data pipelines. Built an autonomous <strong>DataManager Expert AI agent</strong> using Mastra to automate error detection and resolution.</p>
             <div class="project-stack">
               <span>Java</span><span>Shopify API</span><span>AWS SQS</span><span>Mastra</span>
             </div>
+            <button class="project-expand-btn" data-project="hotwax">Quick Look <i class="fa-solid fa-expand"></i></button>
           </div>
         </div>
 
       </div>
     </div>
   </section>
+
+  <!-- PROJECT EXPAND OVERLAY -->
+  <div class="project-overlay" id="projectOverlay">
+    <div class="project-overlay-card">
+      <button class="overlay-close" id="overlayClose"><i class="fa-solid fa-xmark"></i></button>
+      <div id="overlayContent"></div>
+    </div>
+  </div>
 
   <!-- BEYOND CODE -->
   <section class="section" id="beyond">
@@ -292,31 +369,26 @@
       <h2 class="section-title" data-aos="fade-up">The Other Side of the Terminal</h2>
       <p class="beyond-intro" data-aos="fade-up" data-aos-delay="50">Because great engineers aren't built only behind screens.</p>
       <div class="beyond-grid">
-
         <div class="beyond-card" data-aos="fade-up" data-aos-delay="0">
           <div class="beyond-icon">⚽</div>
           <h3>Sports</h3>
           <p>Football, Cricket, Tennis, Chess — I play as seriously as I debug. My chess opening is as unpredictable as my commit messages.</p>
         </div>
-
         <div class="beyond-card" data-aos="fade-up" data-aos-delay="100">
           <div class="beyond-icon">🎬</div>
           <h3>Cinema & TV</h3>
           <p>Movies and shows are my second language. <em>Dead Poets Society</em> taught me to seize the day. <em>The Office</em> taught me how to survive it. <em>Succession</em> taught me corporate warfare.</p>
         </div>
-
         <div class="beyond-card" data-aos="fade-up" data-aos-delay="200">
           <div class="beyond-icon">🎤</div>
           <h3>Leadership</h3>
           <p>Served as <strong>MUN Director General</strong> for events of 400+ participants. Turns out managing diplomats is great practice for managing PRs.</p>
         </div>
-
         <div class="beyond-card" data-aos="fade-up" data-aos-delay="300">
           <div class="beyond-icon">🧑‍🏫</div>
           <h3>Mentoring</h3>
           <p>Guided junior engineers and interns on Java fundamentals, Git workflows, and the unwritten rules of writing maintainable code.</p>
         </div>
-
       </div>
     </div>
   </section>
@@ -330,9 +402,9 @@
         <h2 class="footer-heading">Have something in mind?<br/><span class="accent">Let's talk.</span></h2>
         <p class="footer-sub">I'm always open to discussing backend engineering, AI, new roles, or your favourite <em>Succession</em> episode.</p>
         <div class="footer-links">
-          <a href="mailto:param.dongre@gmail.com" class="footer-link"><i class="fa-solid fa-envelope"></i> param.dongre@gmail.com</a>
-          <a href="https://linkedin.com/in/paramdongre" target="_blank" class="footer-link"><i class="fa-brands fa-linkedin"></i> /in/paramdongre</a>
-          <a href="https://github.com/dongreparam" target="_blank" class="footer-link"><i class="fa-brands fa-github"></i> /dongreparam</a>
+          <a href="mailto:param.dongre@gmail.com" class="footer-link sound-hover"><i class="fa-solid fa-envelope"></i> param.dongre@gmail.com</a>
+          <a href="https://linkedin.com/in/paramdongre" target="_blank" class="footer-link sound-hover"><i class="fa-brands fa-linkedin"></i> /in/paramdongre</a>
+          <a href="https://github.com/dongreparam" target="_blank" class="footer-link sound-hover"><i class="fa-brands fa-github"></i> /dongreparam</a>
         </div>
       </div>
       <div class="footer-bottom">
