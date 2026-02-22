@@ -148,17 +148,14 @@
             <!-- Animated via JS -->
           </div>
         </div>
-        <div class="github-stats-wrap">
-          <img
-            src="https://github-readme-stats.vercel.app/api?username=dongreparam&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1629&title_color=4f7cff&icon_color=00d4ff&text_color=8892a4&count_private=true"
-            alt="Param's GitHub Stats"
-            class="github-stats-img"
-          />
-          <img
-            src="https://github-readme-stats.vercel.app/api/top-langs/?username=dongreparam&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1629&title_color=4f7cff&text_color=8892a4"
-            alt="Top Languages"
-            class="github-stats-img"
-          />
+        <div class="github-stats-wrap" id="githubStatsWrap">
+          <!-- Populated dynamically via GitHub API in script.js -->
+          <div class="gh-card" id="ghStatsCard">
+            <div class="gh-card-loading"><span class="gh-spinner"></span> Loading GitHub stats…</div>
+          </div>
+          <div class="gh-card" id="ghLangsCard">
+            <div class="gh-card-loading"><span class="gh-spinner"></span> Loading top languages…</div>
+          </div>
         </div>
       </div>
     </div>

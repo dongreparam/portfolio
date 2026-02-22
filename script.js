@@ -376,3 +376,102 @@ function launchConfetti() {
   if (frame) cancelAnimationFrame(frame);
   draw();
 }
+
+// =============================================
+// 9. GITHUB STATS (native — no external service)
+// =============================================
+(async function loadGitHubStats() {
+  const username = 'dongreparam';
+  const statsCard = document.getElementById('ghStatsCard');
+  const langsCard = document.getElementById('ghLangsCard');
+
+  try {
+    const [userRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${username}`),
+      fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`)
+    ]);
+
+    if (!userRes.ok || !reposRes.ok) throw new Error('GitHub API error');
+
+    const user = await userRes.json();
+    const repos = await reposRes.json();
+
+    const totalStars = repos.reduce((s, r) => s + r.stargazers_count, 0);
+    const totalForks = repos.reduce((s, r) => s + r.forks_count, 0);
+
+    // Count languages
+    const langMap = {};
+    repos.forEach(r => { if (r.language) langMap[r.language] = (langMap[r.language] || 0) + 1; });
+    const sortedLangs = Object.entries(langMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const totalLangCount = sortedLangs.reduce((s, [, c]) => s + c, 0);
+
+    const langColors = {
+      Java: '#b07219', TypeScript: '#3178c6', JavaScript: '#f7df1e',
+      Python: '#3572A5', Groovy: '#e69f56', Kotlin: '#A97BFF',
+      HTML: '#e34c26', CSS: '#563d7c', Shell: '#89e051',
+      Ruby: '#701516', Go: '#00ADD8', Rust: '#dea584',
+    };
+
+    if (statsCard) {
+      statsCard.innerHTML = `
+        <div class="gh-card-header">
+          <img src="${user.avatar_url}" class="gh-avatar" alt="${user.login}" />
+          <div>
+            <div class="gh-name">${user.name || user.login}</div>
+            <div class="gh-login">@${user.login}</div>
+          </div>
+          <a href="https://github.com/${username}" target="_blank" class="gh-link-btn">
+            <i class="fa-brands fa-github"></i>
+          </a>
+        </div>
+        <div class="gh-stats-grid">
+          <div class="gh-stat">
+            <i class="fa-solid fa-book-bookmark" style="color:#4f7cff"></i>
+            <span class="gh-stat-val">${user.public_repos}</span>
+            <span class="gh-stat-lbl">Repos</span>
+          </div>
+          <div class="gh-stat">
+            <i class="fa-solid fa-star" style="color:#fbbf24"></i>
+            <span class="gh-stat-val">${totalStars}</span>
+            <span class="gh-stat-lbl">Stars</span>
+          </div>
+          <div class="gh-stat">
+            <i class="fa-solid fa-code-fork" style="color:#00d4ff"></i>
+            <span class="gh-stat-val">${totalForks}</span>
+            <span class="gh-stat-lbl">Forks</span>
+          </div>
+          <div class="gh-stat">
+            <i class="fa-solid fa-users" style="color:#9b6fd4"></i>
+            <span class="gh-stat-val">${user.followers}</span>
+            <span class="gh-stat-lbl">Followers</span>
+          </div>
+        </div>`;
+    }
+
+    if (langsCard) {
+      langsCard.innerHTML = `
+        <div class="gh-langs-title"><i class="fa-solid fa-chart-bar" style="color:#4f7cff"></i> Top Languages</div>
+        <div class="gh-langs-list">
+          ${sortedLangs.map(([lang, count]) => {
+            const pct = ((count / totalLangCount) * 100).toFixed(1);
+            const color = langColors[lang] || '#8892a4';
+            return `
+              <div class="gh-lang-row">
+                <span class="gh-lang-dot" style="background:${color}"></span>
+                <span class="gh-lang-name">${lang}</span>
+                <span class="gh-lang-bar-wrap">
+                  <span class="gh-lang-bar" style="width:${pct}%;background:${color}"></span>
+                </span>
+                <span class="gh-lang-pct">${pct}%</span>
+              </div>`;
+          }).join('')}
+        </div>`;
+    }
+
+  } catch (err) {
+    const errMsg = `<div class="gh-card-error"><i class="fa-solid fa-circle-exclamation"></i> Could not load GitHub stats</div>`;
+    if (statsCard) statsCard.innerHTML = errMsg;
+    if (langsCard) langsCard.innerHTML = errMsg;
+  }
+})();
+
