@@ -776,6 +776,27 @@ function launchConfetti() {
   window.__avatarDebug = (state) => applyState(state);
   console.log('%c[Avatar] Debug: call window.__avatarDebug("working"|"sleeping"|"swimming"|"offduty"|"weekend"|"onleave")', 'color:#4f7cff;font-family:monospace');
 
+  // =============================================
+  // SIMPLER EASTER EGG: Avatar Multi-click
+  // =============================================
+  let avatarClicks = 0;
+  let avatarClickTimer = null;
+  widget.addEventListener('click', () => {
+    avatarClicks++;
+    clearTimeout(avatarClickTimer);
+    avatarClickTimer = setTimeout(() => { avatarClicks = 0; }, 1000); // Reset if too slow
+
+    if (avatarClicks === 5) {
+      avatarClicks = 0;
+      const easterOverlay = document.getElementById('easterEggOverlay');
+      if (easterOverlay) {
+        easterOverlay.classList.add('active');
+        if (typeof launchConfetti === 'function') launchConfetti();
+        if (typeof playTone === 'function') playTone(880, 0.3, 'square', 0.08);
+      }
+    }
+  });
+
 })();
 
 
