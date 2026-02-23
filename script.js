@@ -216,7 +216,7 @@ const projectData = {
     link: 'https://github.com/dongreparam/vitran-2.0',
   },
   mcp: {
-    title: 'MCP Server for SOC OFBiz',
+    title: 'MCP OFBiz Server',
     sub: 'AI ↔ Enterprise Commerce Bridge',
     desc: 'A Model Context Protocol (MCP) server that acts as a structured bridge between AI agents and the OFBiz enterprise system. Enables AI to query, reason about, and interact with complex commerce data in a safe, typed, schema-driven way.',
     highlights: [
