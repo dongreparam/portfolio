@@ -1,40 +1,44 @@
 /* =========================================================
-   Order-flow network — the hero background.
-   A stylised version of what Param actually builds: orders
-   arriving from a storefront, brokered by an OMS, routed to
-   fulfilment locations, with the occasional reject looping
-   back to be re-brokered.
-   Degrades to a static gradient on small screens, on
+   Order-flow network — the hero graphic.
+   A stylised version of what Param builds: orders leaving a
+   storefront, brokered by an OMS, routed to fulfilment, with
+   the occasional reject looping back to be re-brokered.
+
+   Click the hero to inject an order.
+
+   Falls back to a still diagram on small screens, on
    prefers-reduced-motion, and anywhere WebGL is missing.
    ========================================================= */
 (function () {
   const mount = document.getElementById('flow-canvas');
   if (!mount) return;
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const small = window.matchMedia('(max-width: 760px)').matches;
-  function staticMode(reason) {
+  const note = document.querySelector('.flow-note');
+  const keys = document.querySelector('.flow-keys');
+  const readout = document.getElementById('flow-count');
+
+  function staticMode() {
     mount.classList.add('flow-static');
-    const note = document.querySelector('.flow-note');
-    if (note) note.textContent = '\u2014 a network of orders being routed, held still here to save your battery.';
-    const keys = document.querySelectorAll('.flow-key');
-    keys.forEach(k => { k.style.display = 'none'; });
-    return reason;
+    if (keys) keys.style.display = 'none';
+    if (note) note.textContent = 'A network of orders being routed. Held still here to save your battery.';
   }
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const small = window.matchMedia('(max-width: 820px)').matches;
   if (reduced || small || typeof THREE === 'undefined') { staticMode(); return; }
 
-  const CYAN = new THREE.Color('#3fd8e0');
-  const BLUE = new THREE.Color('#4f7cff');
-  const AMBER = new THREE.Color('#f2b544');
+  /* ink-on-paper palette, tuned for a light ground */
+  const INDIGO = new THREE.Color('#3b2bff');
+  const TEAL = new THREE.Color('#0f9d8f');
+  const AMBER = new THREE.Color('#e08a00');
 
-  /* ---- topology: storefront -> OMS -> brokering -> fulfilment ---- */
   const NODES = [
-    { p: new THREE.Vector3(-7.2, 0.2, 0), label: 'storefront', r: 0.20 },
-    { p: new THREE.Vector3(-2.4, 0.0, 0), label: 'OMS', r: 0.30 },
-    { p: new THREE.Vector3(1.8, 0.1, 0), label: 'brokering', r: 0.26 },
-    { p: new THREE.Vector3(6.6, 2.0, -0.6), label: 'store', r: 0.17 },
-    { p: new THREE.Vector3(7.0, 0.1, 0.4), label: 'warehouse', r: 0.17 },
-    { p: new THREE.Vector3(6.5, -1.9, -0.3), label: 'store', r: 0.17 }
+    { p: new THREE.Vector3(-7.4, 0.4, 0), r: 0.17 },
+    { p: new THREE.Vector3(-2.6, 0.0, 0), r: 0.28 },
+    { p: new THREE.Vector3(1.7, 0.2, 0), r: 0.24 },
+    { p: new THREE.Vector3(6.6, 2.1, -0.5), r: 0.15 },
+    { p: new THREE.Vector3(7.1, 0.0, 0.4), r: 0.15 },
+    { p: new THREE.Vector3(6.4, -2.0, -0.3), r: 0.15 }
   ];
 
   function curve(a, b, lift, bow) {
@@ -45,24 +49,17 @@
   }
 
   const EDGES = [
-    curve(0, 1, 0.35, 0.2),
-    curve(1, 2, -0.25, -0.3),
-    curve(2, 3, 0.5, 0.3),
-    curve(2, 4, 0.0, -0.2),
-    curve(2, 5, -0.5, 0.35)
+    curve(0, 1, 0.35, 0.2), curve(1, 2, -0.25, -0.3),
+    curve(2, 3, 0.5, 0.3), curve(2, 4, 0.0, -0.2), curve(2, 5, -0.5, 0.35)
   ];
-  // the reject path: brokering loops back to the OMS to be re-brokered
   const REJECT = new THREE.CatmullRomCurve3([
-    NODES[2].p.clone(),
-    new THREE.Vector3(-0.3, -2.1, 1.2),
-    NODES[1].p.clone()
+    NODES[2].p.clone(), new THREE.Vector3(-0.4, -2.2, 1.2), NODES[1].p.clone()
   ]);
   const PATHS = EDGES.concat([REJECT]);
 
-  /* ---- scene ---- */
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(46, mount.clientWidth / mount.clientHeight, 0.1, 100);
-  camera.position.set(0.2, 0.4, 13.2);
+  camera.position.set(0.2, 0.3, 13.6);
 
   let renderer;
   try {
@@ -73,82 +70,91 @@
   mount.appendChild(renderer.domElement);
 
   const world = new THREE.Group();
+  // keep the network clear of the left-hand text column on wide screens
+  world.position.x = window.innerWidth > 1100 ? 2.6 : 1.2;
   scene.add(world);
 
-  /* ---- edges as faint tubes of line segments ---- */
   PATHS.forEach((c, i) => {
-    const pts = c.getPoints(60);
-    const g = new THREE.BufferGeometry().setFromPoints(pts);
-    const m = new THREE.LineBasicMaterial({
-      color: i === PATHS.length - 1 ? AMBER : BLUE,
-      transparent: true,
-      opacity: i === PATHS.length - 1 ? 0.16 : 0.26
-    });
-    world.add(new THREE.Line(g, m));
+    const last = i === PATHS.length - 1;
+    const g = new THREE.BufferGeometry().setFromPoints(c.getPoints(60));
+    world.add(new THREE.Line(g, new THREE.LineBasicMaterial({
+      color: last ? AMBER : INDIGO, transparent: true, opacity: last ? 0.22 : 0.30
+    })));
   });
 
-  /* ---- nodes ---- */
   const nodeMeshes = [];
   NODES.forEach((n, i) => {
-    const geo = new THREE.SphereGeometry(n.r, 20, 20);
-    const mat = new THREE.MeshBasicMaterial({
-      color: i === 1 ? CYAN : BLUE, transparent: true, opacity: 0.9
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.copy(n.p);
-    world.add(mesh);
-
-    const halo = new THREE.Mesh(
-      new THREE.SphereGeometry(n.r * 2.6, 18, 18),
-      new THREE.MeshBasicMaterial({
-        color: i === 1 ? CYAN : BLUE, transparent: true, opacity: 0.07
-      })
+    const color = i === 1 ? TEAL : INDIGO;
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(n.r, 20, 20),
+      new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.85 })
     );
-    halo.position.copy(n.p);
-    world.add(halo);
-    nodeMeshes.push({ mesh, halo, base: n.r, pulse: Math.random() * Math.PI * 2 });
+    mesh.position.copy(n.p); world.add(mesh);
+    const halo = new THREE.Mesh(
+      new THREE.SphereGeometry(n.r * 2.8, 18, 18),
+      new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.10 })
+    );
+    halo.position.copy(n.p); world.add(halo);
+    nodeMeshes.push({ mesh: mesh, halo: halo, pulse: Math.random() * Math.PI * 2 });
   });
 
-  /* ---- packets: one point per in-flight order ---- */
-  const COUNT = 170;
-  const pos = new Float32Array(COUNT * 3);
-  const col = new Float32Array(COUNT * 3);
+  const MAX = 260;
+  const pos = new Float32Array(MAX * 3);
+  const col = new Float32Array(MAX * 3);
   const packets = [];
+  const BASE = 150;
 
-  function spawn(i, atStart) {
-    const rejected = Math.random() < 0.13;
-    packets[i] = {
+  function make(atStart, forceReject) {
+    const rejected = forceReject !== undefined ? forceReject : Math.random() < 0.12;
+    return {
       path: rejected ? PATHS.length - 1 : Math.floor(Math.random() * EDGES.length),
       t: atStart ? Math.random() : 0,
       speed: 0.0016 + Math.random() * 0.0026,
-      rejected: rejected
+      rejected: rejected,
+      injected: false
     };
   }
-  for (let i = 0; i < COUNT; i++) spawn(i, true);
+  for (let i = 0; i < BASE; i++) packets.push(make(true));
 
   const pGeo = new THREE.BufferGeometry();
   pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   pGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  const pMat = new THREE.PointsMaterial({
-    size: 0.115, vertexColors: true, transparent: true, opacity: 0.95,
-    sizeAttenuation: true, depthWrite: false, blending: THREE.AdditiveBlending
-  });
-  world.add(new THREE.Points(pGeo, pMat));
+  pGeo.setDrawRange(0, packets.length);
+  world.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+    size: 0.13, vertexColors: true, transparent: true, opacity: 0.95,
+    sizeAttenuation: true, depthWrite: false
+  })));
 
-  /* ---- counter: orders that completed a path ---- */
-  const readout = document.getElementById('flow-count');
   let routed = 11840 + Math.floor(Math.random() * 400);
+  let injected = 0;
   if (readout) readout.textContent = routed.toLocaleString('en-IN');
 
-  /* ---- interaction: gentle parallax ---- */
+  /* ---- click to inject an order ---- */
+  const hero = document.getElementById('home') || mount.parentElement;
+  const injectLabel = document.getElementById('inject-count');
+  hero.addEventListener('click', function (e) {
+    if (e.target.closest('a, button')) return;
+    for (let n = 0; n < 6 && packets.length < MAX; n++) {
+      const pk = make(false, false);
+      pk.injected = true; pk.speed = 0.004 + Math.random() * 0.002;
+      packets.push(pk);
+    }
+    pGeo.setDrawRange(0, packets.length);
+    injected += 6;
+    if (injectLabel) {
+      injectLabel.textContent = injected;
+      injectLabel.parentElement.classList.add('is-live');
+    }
+  });
+
   let tx = 0, ty = 0, cx = 0, cy = 0;
-  window.addEventListener('pointermove', e => {
-    tx = (e.clientX / window.innerWidth - 0.5) * 0.22;
-    ty = (e.clientY / window.innerHeight - 0.5) * 0.14;
+  window.addEventListener('pointermove', function (e) {
+    tx = (e.clientX / window.innerWidth - 0.5) * 0.20;
+    ty = (e.clientY / window.innerHeight - 0.5) * 0.12;
   }, { passive: true });
 
   let running = true;
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+  document.addEventListener('visibilitychange', function () { running = !document.hidden; });
 
   const tmp = new THREE.Vector3();
   let frame = 0;
@@ -158,34 +164,40 @@
     if (!running) return;
     frame++;
 
-    for (let i = 0; i < COUNT; i++) {
+    for (let i = 0; i < packets.length; i++) {
       const pk = packets[i];
       pk.t += pk.speed;
-      if (pk.t >= 1) { routed++; spawn(i, false); continue; }
+      if (pk.t >= 1) {
+        routed++;
+        if (pk.injected && packets.length > BASE) { packets.splice(i, 1); i--; pGeo.setDrawRange(0, packets.length); continue; }
+        packets[i] = make(false);
+        continue;
+      }
       PATHS[pk.path].getPoint(pk.t, tmp);
       pos[i * 3] = tmp.x; pos[i * 3 + 1] = tmp.y; pos[i * 3 + 2] = tmp.z;
-      const c = pk.rejected ? AMBER : (pk.t > 0.55 ? CYAN : BLUE);
+      const c = pk.rejected ? AMBER : (pk.injected ? TEAL : INDIGO);
       col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
     }
     pGeo.attributes.position.needsUpdate = true;
     pGeo.attributes.color.needsUpdate = true;
 
-    nodeMeshes.forEach(n => {
+    for (let k = 0; k < nodeMeshes.length; k++) {
+      const n = nodeMeshes[k];
       n.pulse += 0.02;
-      const s = 1 + Math.sin(n.pulse) * 0.08;
-      n.mesh.scale.setScalar(s);
-      n.halo.scale.setScalar(1 + Math.sin(n.pulse) * 0.12);
-    });
+      n.mesh.scale.setScalar(1 + Math.sin(n.pulse) * 0.07);
+      n.halo.scale.setScalar(1 + Math.sin(n.pulse) * 0.13);
+    }
 
     cx += (tx - cx) * 0.04; cy += (ty - cy) * 0.04;
     world.rotation.y = cx; world.rotation.x = cy;
+    world.position.x = (window.innerWidth > 1100 ? 2.6 : 1.2) + cx * 1.4;
 
     if (readout && frame % 18 === 0) readout.textContent = routed.toLocaleString('en-IN');
     renderer.render(scene, camera);
   }
   tick();
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', function () {
     if (!mount.clientWidth) return;
     camera.aspect = mount.clientWidth / mount.clientHeight;
     camera.updateProjectionMatrix();
