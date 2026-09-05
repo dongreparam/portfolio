@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Param Dongre — Jack of All Trades</title>
-  <meta name="description" content="Param Dongre — Backend Engineer, AI Builder, and jack of all trades based in Indore, India." />
+  <title>Param Dongre — Backend Engineer</title>
+  <meta name="description" content="Param Dongre — backend engineer in Indore. Order management systems in Java: Spring Boot, Apache OFBiz, Shopify integrations, event-driven pipelines on AWS." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -65,24 +65,22 @@
 
   <!-- HERO -->
   <section class="hero" id="home">
-    <!-- Aurora blobs -->
-    <div class="aurora-blob blob-1"></div>
-    <div class="aurora-blob blob-2"></div>
-    <div class="aurora-blob blob-3"></div>
-    <div class="aurora-blob blob-4"></div>
-    <div id="particles-js"></div>
+    <!-- Order-flow network (three.js) -->
+    <div id="flow-canvas" aria-hidden="true"></div>
     <div class="hero-glow glow-1"></div>
-    <div class="hero-glow glow-2"></div>
     <div class="hero-content">
-      <p class="hero-greeting">Hey there, I'm</p>
+      <p class="hero-eyebrow mono">Backend engineer &middot; Indore</p>
       <h1 class="hero-name">Param Dongre</h1>
       <div class="hero-typed-wrapper">
         <span class="typed-prefix">I build</span>
         <span id="typed-text" class="typed-text"></span>
         <span class="typed-cursor">|</span>
       </div>
-      <p class="hero-tagline">
-        <span class="mono">// </span>Jack of all trades &mdash; master of shipping things that actually work.
+      <p class="hero-lede">I build the systems that decide where your order ships from &mdash; and keep them standing when fifty-five thousand of them land on the same day.</p>
+      <p class="hero-tagline mono">
+        <span class="flow-key"><i class="dot dot-blue"></i>order</span>
+        <span class="flow-key"><i class="dot dot-amber"></i>rejected, re-brokered</span>
+        <span class="flow-note">&mdash; <span id="flow-count">0</span> routed since you opened this page. None of them are real.</span>
       </p>
       <div class="hero-cta-group">
         <a href="#projects" class="btn btn-primary sound-hover">View My Work <i class="fa-solid fa-arrow-down"></i></a>
@@ -433,31 +431,31 @@
     <div class="container">
       <div class="section-label" data-aos="fade-right"><span class="mono">05.</span> Beyond Code</div>
       <h2 class="section-title" data-aos="fade-up">The Other Side of the Terminal</h2>
-      <p class="beyond-intro" data-aos="fade-up" data-aos-delay="50">Because great engineers aren't built only behind screens.</p>
+      <p class="beyond-intro" data-aos="fade-up" data-aos-delay="50">The parts that don't fit on a CV, and probably explain more than the parts that do.</p>
       <div class="beyond-grid">
-        <div class="beyond-card" data-aos="fade-up" data-aos-delay="0">
-          <div class="beyond-icon">⚽</div>
-          <h3>Sports</h3>
-          <p>Football, Cricket, Tennis, Chess — I play as seriously as I debug. My chess opening is as unpredictable as my commit messages.</p>
-        </div>
-        <div class="beyond-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="beyond-icon">🎬</div>
-          <h3>Cinema & TV</h3>
-          <p>Movies and shows are my second language. <em>Dead Poets Society</em> taught me to seize the day. <em>The Office</em> taught me how to survive it. <em>Succession</em> taught me corporate warfare.</p>
-        </div>
-        <div class="beyond-card" data-aos="fade-up" data-aos-delay="200">
-          <div class="beyond-icon">🎤</div>
-          <h3>Leadership</h3>
-          <p>Served as <strong>MUN Director General</strong> for events of 400+ participants. Turns out managing diplomats is great practice for managing PRs.</p>
-        </div>
-        <div class="beyond-card" data-aos="fade-up" data-aos-delay="300">
-          <div class="beyond-icon">🧑‍🏫</div>
-          <h3>Mentoring</h3>
-          <p>Guided junior engineers and interns on Java fundamentals, Git workflows, and the unwritten rules of writing maintainable code.</p>
+          <div class="beyond-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="beyond-icon">🎤</div>
+            <h3>Stand-up comedy</h3>
+            <p>I've done stand-up, on real stages, to real strangers. It's the most useful thing I've done for engineering: you learn to read a room, cut whatever isn't working, and stay composed when the thing you were certain about lands in silence.</p>
+          </div>
+          <div class="beyond-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="beyond-icon">📚</div>
+            <h3>Literature club</h3>
+            <p>I ran one. I was also <strong>MUN Director General</strong> for events with 400+ participants. Both are the same job as running a sprint, with better arguments and worse deadlines.</p>
+          </div>
+          <div class="beyond-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="beyond-icon">⚽</div>
+            <h3>Sports</h3>
+            <p>Football, cricket, lawn tennis, chess. Chess is the one that turns up at work &mdash; thinking three moves ahead about what breaks in production is the same muscle, with worse consequences.</p>
+          </div>
+          <div class="beyond-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="beyond-icon">🎬</div>
+            <h3>Film &amp; television</h3>
+            <p><em>Dead Poets Society</em>, <em>The Office</em>, <em>Succession</em>. One taught me to seize the day, one taught me to survive it, and one taught me what happens when nobody writes anything down.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
   <!-- CONTACT / FOOTER -->
   <footer class="footer" id="contact">
@@ -466,7 +464,7 @@
       <div data-aos="fade-up">
         <p class="footer-label mono">Let's connect</p>
         <h2 class="footer-heading">Have something in mind?<br/><span class="accent">Let's talk.</span></h2>
-        <p class="footer-sub">I'm always open to discussing backend engineering, AI, new roles, or your favourite <em>Succession</em> episode.</p>
+        <p class="footer-sub">Open to backend roles &mdash; and to arguing about whether <em>Succession</em> season two is the best television ever made. It is.</p>
         <div class="footer-links">
           <a href="mailto:param.dongre@gmail.com" class="footer-link sound-hover"><i class="fa-solid fa-envelope"></i> param.dongre@gmail.com</a>
           <a href="https://linkedin.com/in/paramdongre" target="_blank" class="footer-link sound-hover"><i class="fa-brands fa-linkedin"></i> /in/paramdongre</a>
@@ -475,16 +473,17 @@
       </div>
       <div class="footer-bottom">
         <span>Designed & Built by Param Dongre</span>
-        <span class="mono footer-quote">"// jack of all trades, master of shipping."</span>
+        <span class="mono footer-quote">// built in Indore, mostly at night</span>
       </div>
     </div>
   </footer>
 
   <!-- SCRIPTS -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
   <script src="script.js"></script>
+  <script src="assets/flow.js"></script>
 
 </body>
 </html>
